@@ -8,36 +8,25 @@
  */
 int _checker(va_list args, int count, const char *format)
 {
-	if (*format == '%')
-	{
-		format++;
-		if (*format == 'c')
-		{
-			char c = va_arg(args, int);
-
-			putchar(c);
-			count++;
-		}
-		else if (*format == 's')
+		if (*format == 's')
 		{
 			char *s = va_arg(args, char *);
 
 			while (*s != '\0')
 			{
-			putchar(*s);
+			_putchar(*s);
 			s++;
 			count++;
 			}
 		}
 		else if (*format == '%')
 		{
-			putchar('%');
+			_putchar('%');
 			count++;
 		}
-	}
 	else
 	{
-		putchar(*format);
+		_putchar(*format);
 		count++;
 	}
 	return (count);
@@ -65,14 +54,15 @@ int _printf(const char *format, ...)
 			{
 				char c = va_arg(args, int);
 
-				putchar(c);
+				format++;
+				_putchar(c);
 				count++;
 			}
 		count = _checker(args, count, format);
 		}
 		else
 		{
-			putchar(*format);
+			_putchar(*format);
 			count++;
 		}
 		format++;
