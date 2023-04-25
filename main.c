@@ -1,76 +1,95 @@
-#ifndef MAIN_H
-#define MAIN_H
-
-#include <stdlib.h>
-#include <stdarg.h>
+#include "main.h"
+#include <stdio.h>
 
 /**
- * struct flags - struct containing flags to "turn on"
- * when a flag specifier is passed to _printf()
- * @plus: flag for the '+' character
- * @space: flag for the ' ' character
- * @hash: flag for the '#' character
- */
-typedef struct flags
+  * main - A main to tests %c and %s cases in _printf()
+  * vs. printf()
+  *
+  * Return: Always zero.
+  */
+int main(void)
 {
-	int plus;
-	int space;
-	int hash;
-} flags_t;
+	int a = 0, b = 0;
 
-/**
- * struct printHandler - struct to choose the right function depending
- * on the format specifier passed to _printf()
- * @c: format specifier
- * @f: pointer to the correct printing function
- */
-typedef struct printHandler
-{
-	char c;
-	int (*f)(va_list ap, flags_t *f);
-} ph;
+	/* ========================= */
+	/* 			%c CASES		 */
+	/* ========================= */
+	printf("======================\n");
+	printf("****** c CASES ******\n");
+	printf("======================\n");
+	a = printf("Expected output:    %cAAA\n", 'a');
+	b = _printf("Current output:     %cAAA\n", 'a');
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %cc\n", 'a');
+	b = _printf("Current output:     %cc\n", 'a');
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %yd\n");
+	b = _printf("Current output:     %yd\n");
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %c\n", 53);
+	b = _printf("Current output:     %c\n", 53);
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %c\n", '\0');
+	b = _printf("Current output:     %c\n", '\0');
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %%%c\n", 'y');
+	b = _printf("Current output:     %%%c\n", 'y');
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
 
-/* print_nums */
-int print_int(va_list l, flags_t *f);
-void print_number(int n);
-int print_unsigned(va_list l, flags_t *f);
-int count_digit(int i);
+	/* ========================= */
+	/* 			%s CASES		 */
+	/* ========================= */
+	printf("======================\n");
+	printf("****** s CASES ******\n");
+	printf("======================\n");
+	a = printf("Expected output:    %s\n", "Holberton");
+	b = _printf("Current output:     %s\n", "Holberton");
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %s$\n", "");
+	b = _printf("Current output:     %s$\n", "");
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %s\n", "hello, world");
+	b = _printf("Current output:     %s\n", "hello, world");
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %s$\n", NULL);
+	b = _printf("Current output:     %s$\n", NULL);
+	printf("Expected length:    %i\n", a);
+	printf("Current length:     %i\n", b);
+	a = printf("Expected output:    %sschool\n", "Holberton");
+	b = _printf("Current output:     %sschool\n", "Holberton");
+	printf("Expected length:    %i\n", a);
+	printf("Current length:     %i\n", b);
 
-/* print_bases */
-int print_hex(va_list l, flags_t *f);
-int print_hex_big(va_list l, flags_t *f);
-int print_binary(va_list l, flags_t *f);
-int print_octal(va_list l, flags_t *f);
-
-/* converter */
-char *convert(unsigned long int num, int base, int lowercase);
-
-/* _printf */
-int _printf(const char *format, ...);
-
-/* get_print */
-int (*get_print(char s))(va_list, flags_t *);
-
-/* get_flag */
-int get_flag(char s, flags_t *f);
-
-/* print_alpha */
-int print_string(va_list l, flags_t *f);
-int print_char(va_list l, flags_t *f);
-
-/* write_funcs */
-int _putchar(char c);
-int _puts(char *str);
-
-/* print_custom */
-int print_rot13(va_list l, flags_t *f);
-int print_rev(va_list l, flags_t *f);
-int print_bigS(va_list l, flags_t *f);
-
-/* print_address */
-int print_address(va_list l, flags_t *f);
-
-/* print_percent */
-int print_percent(va_list l, flags_t *f);
-
-#endif
+	/* ========================= */
+	/* 			% CASES		 */
+	/* ========================= */
+	printf("===========================\n");
+	printf("****** PERCENT CASES ******\n");
+	printf("===========================\n");
+	a = printf("Expected output:    %%\n");
+	b = _printf("Current output:     %%\n");
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	a = printf("Expected output:    %%%%\n");
+	b = _printf("Current output:     %%%%\n");
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	printf("Expected output:    ");
+	a = printf("%");
+	printf("\n");
+	printf("Current output:     ");
+	b = _printf("%");
+	printf("\n");
+	printf("Expected length:    %d\n", a);
+	printf("Current length:     %d\n", b);
+	return (0);
+}
