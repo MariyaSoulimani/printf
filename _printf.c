@@ -1,53 +1,76 @@
 #include "main.h"
 
 /**
- * checker - checks for format specifiers
- * @args: argument list
- * @count: number of characters printed
- * @format: format string
+ * handle_str - prints a string to stdout
  *
- * Return: number of characters printed
+ * @str: the string to print
+ *
+ * Return: the number of characters printed
+ *         or the number of characters printed for "(null)"
+ *         if str is NULL
  */
-int checker(va_list args, int count, const char *format)
+int handle_str(char *str)
 {
-			if (*format == 'c')
-			{
-				char c = va_arg(args, int);
+	int count, i;
 
-				count += _putchar(c);
-			}
-			if (*format == 's')
-			{
-				char *str = va_arg(args, char *);
+	if (str == NULL)
+	{
+		return (handle_str("(null)"));
+	}
+	count = 0;
+	for (i = 0; str[i] != '\0'; i++)
+	{
+		count += _putchar(str[i]);
+	}
+	return (count);
+}
 
-				count += handle_string(str);
-			}
-			else if (*format == '%')
-			{
-				_putchar('%');
-				count++;
-			}
-			else if (*format == 'd' || *format == 'i')
-			{
-				int num = va_arg(args, int);
+/**
+ * handle_format - handles a conversion specifier in the format string
+ *
+ * @format: a pointer to a pointer to the current position in the format string
+ * @args: the list of arguments for the format string
+ *
+ * Return: the number of characters printed
+ */
+int handle_format(const char **format, va_list args)
+{
+	int count;
 
-				if (num < 0)
-					count++;
-				count += len_num(num);
-				handle_number(num);
-			}
-			else
-			{
-				_putchar('%');
-				count++;
-				if (*format)
-				{
-					_putchar(*format);
-					count++;
-				}
-			}
-			format++;
-			return (count);
+	count = 0;
+	switch (**format)
+	{
+		case 'c':
+		{
+			char c = va_arg(args, int);
+
+			count += _putchar(c);
+			(*format)++;
+			break;
+		}
+		case 's':
+		{
+			char *str = va_arg(args, char *);
+
+			count += handle_str(str);
+			(*format)++;
+			break;
+		}
+		case '%':
+		{
+			_putchar('%');
+			count++;
+			(*format)++;
+			break;
+		}
+		default:
+		{
+			_putchar('%');
+			count++;
+			break;
+		}
+	}
+	return (count);
 }
 
 /**
@@ -58,28 +81,27 @@ int checker(va_list args, int count, const char *format)
  */
 int _printf(const char *format, ...)
 {
-	int count = 0;
-
+	int count;
 	va_list args;
 
 	va_start(args, format);
-	if (!format || !format[0])
+	count = 0;
+	if (format == NULL || format[0] == '\0')
+	{
 		return (-1);
-	if (*format == '%' && !format[1])
-		return (-1);
+	}
 	while (*format)
 	{
 		if (*format == '%')
 		{
 			format++;
-			count = checker(args, count, format);
-		}
-		else
+			count += handle_format(&format, args);
+		} else
 		{
-			_putchar(*format);
+			count += _putchar(*format);
 			format++;
-			count++;
 		}
 	}
+	va_end(args);
 	return (count);
 }

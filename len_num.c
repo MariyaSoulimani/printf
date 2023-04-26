@@ -8,7 +8,7 @@
 */
 int len_num(int num)
 {
-    if (num == 0)
-        return (0);
-    return (1 + len_num(num / 10));
+	if (num == 0)
+		return (0);
+	return (1 + len_num(num / 10));
 }
