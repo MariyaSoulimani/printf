@@ -1,34 +1,22 @@
 #include "main.h"
 
 /**
- * _printf - produces output according to a format
- * @format: format string containing the characters and the specifiers
+ * checker - checks for format specifiers
+ * @args: argument list
+ * @count: number of characters printed
+ * @format: format string
  *
- * Return: length of the formatted output string
+ * Return: number of characters printed
  */
-int _printf(const char *format, ...)
+int checker(va_list args, int count, const char *format)
 {
-	int count = 0;
-
-	va_list args;
-
-	va_start(args, format);
-	if (!format || !format[0])
-		return (-1);
-	if (*format == '%' && !format[1])
-		return (-1);
-	while (*format)
-	{
-		if (*format == '%')
-		{
-			format++;
 			if (*format == 'c')
 			{
 				char c = va_arg(args, int);
 
 				count += _putchar(c);
 			}
-			else if (*format == 's')
+			if (*format == 's')
 			{
 				char *str = va_arg(args, char *);
 
@@ -59,6 +47,32 @@ int _printf(const char *format, ...)
 				}
 			}
 			format++;
+			return (count);
+}
+
+/**
+ * _printf - produces output according to a format
+ * @format: format string containing the characters and the specifiers
+ *
+ * Return: length of the formatted output string
+ */
+int _printf(const char *format, ...)
+{
+	int count = 0;
+
+	va_list args;
+
+	va_start(args, format);
+	if (!format || !format[0])
+		return (-1);
+	if (*format == '%' && !format[1])
+		return (-1);
+	while (*format)
+	{
+		if (*format == '%')
+		{
+			format++;
+			count = checker(args, count, format);
 		}
 		else
 		{
